@@ -18,7 +18,7 @@
     {
       "key": "displayMode",
       "title": "표시 언어 / Display Language",
-      "type": "combo",
+      "type": "string",
       "options": ["Korean + English", "Korean only", "English only"],
       "default": "Korean + English",
       "description": "삽입할 번역본 선택 / Choose which translation(s) to display"
