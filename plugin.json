@@ -16,12 +16,18 @@
   ],
   "plugin.settings": [
     {
-      "key": "displayMode",
-      "title": "표시 언어 / Display Language",
-      "type": "string",
-      "options": ["Korean + English", "Korean only", "English only"],
-      "default": "Korean + English",
-      "description": "삽입할 번역본 선택 / Choose which translation(s) to display"
+      "key": "showKorean",
+      "title": "한국어 표시 (개역개정) / Show Korean",
+      "type": "bool",
+      "default": true,
+      "description": "한국어 개역개정 번역을 삽입 / Include Korean (개역개정) translation"
+    },
+    {
+      "key": "showEnglish",
+      "title": "영어 표시 (KJV) / Show English",
+      "type": "bool",
+      "default": true,
+      "description": "영어 KJV 번역을 삽입 / Include English (KJV) translation"
     }
   ]
 }

@@ -92,9 +92,17 @@ async function insertBibleVerse() {
     return;
   }
 
-  const displayMode = (DataStore.settings && DataStore.settings.displayMode) || "Korean + English";
-  const needKo = displayMode !== "English only";
-  const needEn = displayMode !== "Korean only";
+  const settings = DataStore.settings || {};
+  const needKo = settings.showKorean !== false;
+  const needEn = settings.showEnglish !== false;
+
+  if (!needKo && !needEn) {
+    await CommandBar.showAlert(
+      "설정 오류 / Settings Error",
+      "한국어 또는 영어 중 하나 이상 체크해주세요.\nEnable at least one language in plugin settings."
+    );
+    return;
+  }
 
   const urlKo = `https://api.getbible.net/v2/korean/${bookNum}/${chapter}.json`;
   const urlEn = `https://api.getbible.net/v2/kjv/${bookNum}/${chapter}.json`;
