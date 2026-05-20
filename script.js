@@ -107,14 +107,7 @@ async function insertBibleVerse() {
   const urlKo = `https://api.getbible.net/v2/korean/${bookNum}/${chapter}.json`;
   const urlEn = `https://api.getbible.net/v2/kjv/${bookNum}/${chapter}.json`;
 
-  try {
-    const [resKo, resEn] = await Promise.all([
-      needKo ? fetch(urlKo) : Promise.resolve(null),
-      needEn ? fetch(urlEn) : Promise.resolve(null),
-    ]);
-    const ko = resKo ? JSON.parse(resKo) : null;
-    const en = resEn ? JSON.parse(resEn) : null;
-
+  function buildAndInsert(ko, en) {
     let text = `**📖 ${input}**\n`;
     for (let v = startVerse; v <= endVerse; v++) {
       const vKo = ko ? ko.verses.find(vv => vv.verse === v) : null;
@@ -125,7 +118,26 @@ async function insertBibleVerse() {
       if (v < endVerse) text += `>\n`;
     }
     Editor.insertTextAtCursor(text);
-  } catch (err) {
-    await CommandBar.showAlert("API 오류 / API Error", `${err}`);
+  }
+
+  if (needKo && needEn) {
+    fetch(urlKo)
+      .then(resKo => {
+        const ko = JSON.parse(resKo);
+        fetch(urlEn)
+          .then(resEn => buildAndInsert(ko, JSON.parse(resEn)))
+          .catch(err => CommandBar.showAlert("API 오류 (EN)", `${err}`));
+      })
+      .catch(err => CommandBar.showAlert("API 오류 (KO)", `${err}`));
+  } else if (needKo) {
+    fetch(urlKo)
+      .then(resKo => buildAndInsert(JSON.parse(resKo), null))
+      .catch(err => CommandBar.showAlert("API 오류 (KO)", `${err}`));
+  } else {
+    fetch(urlEn)
+      .then(resEn => buildAndInsert(null, JSON.parse(resEn)))
+      .catch(err => CommandBar.showAlert("API 오류 (EN)", `${err}`));
   }
 }
+
+function onSettingsUpdated() {}
