@@ -1,0 +1,17 @@
+{
+  "noteplan.minAppVersion": "3.0.21",
+  "macOS.minVersion": "10.15.7",
+  "plugin.id": "duncan.bible",
+  "plugin.name": "Bible Verse Inserter",
+  "plugin.description": "성경 구절을 한국어·영어로 노트에 삽입 | Insert Bible verses (Korean + English KJV) via GetBible API",
+  "plugin.author": "Duncan",
+  "plugin.version": "1.0.0",
+  "plugin.script": "script.js",
+  "plugin.commands": [
+    {
+      "name": "bible",
+      "description": "성경 구절 삽입 | Insert Bible verse (e.g. 요 3:16, John 3:16, 요 3:16-18)",
+      "jsFunction": "insertBibleVerse"
+    }
+  ]
+}

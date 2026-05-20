@@ -1,0 +1,9 @@
+# macOS
+.DS_Store
+
+# Claude Code
+.claude/
+
+# MCP / dev logs
+_MCP-*.log
+*.log
