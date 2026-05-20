@@ -13,5 +13,15 @@
       "description": "성경 구절 삽입 | Insert Bible verse (e.g. 요 3:16, John 3:16, 요 3:16-18)",
       "jsFunction": "insertBibleVerse"
     }
+  ],
+  "plugin.settings": [
+    {
+      "key": "displayMode",
+      "title": "표시 언어 / Display Language",
+      "type": "combo",
+      "options": ["Korean + English", "Korean only", "English only"],
+      "default": "Korean + English",
+      "description": "삽입할 번역본 선택 / Choose which translation(s) to display"
+    }
   ]
 }

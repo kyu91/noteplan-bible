@@ -92,26 +92,32 @@ async function insertBibleVerse() {
     return;
   }
 
+  const displayMode = (DataStore.settings && DataStore.settings.displayMode) || "Korean + English";
+  const needKo = displayMode !== "English only";
+  const needEn = displayMode !== "Korean only";
+
   const urlKo = `https://api.getbible.net/v2/korean/${bookNum}/${chapter}.json`;
   const urlEn = `https://api.getbible.net/v2/kjv/${bookNum}/${chapter}.json`;
 
-  fetch(urlKo)
-    .then(resKo => {
-      const ko = JSON.parse(resKo);
-      fetch(urlEn)
-        .then(resEn => {
-          const en = JSON.parse(resEn);
-          let text = `**📖 ${input}**\n`;
-          for (let v = startVerse; v <= endVerse; v++) {
-            const verseKo = ko.verses.find(vv => vv.verse === v);
-            const verseEn = en.verses.find(vv => vv.verse === v);
-            if (verseKo) text += `> **${v}절** ${verseKo.text.trim()}\n`;
-            if (verseEn) text += `> *${verseEn.text.trim()}*\n`;
-            if (v < endVerse) text += `>\n`;
-          }
-          Editor.insertTextAtCursor(text);
-        })
-        .catch(err => CommandBar.showAlert("API 오류 (EN)", `${err}`));
-    })
-    .catch(err => CommandBar.showAlert("API 오류 (KO)", `${err}`));
+  try {
+    const [resKo, resEn] = await Promise.all([
+      needKo ? fetch(urlKo) : Promise.resolve(null),
+      needEn ? fetch(urlEn) : Promise.resolve(null),
+    ]);
+    const ko = resKo ? JSON.parse(resKo) : null;
+    const en = resEn ? JSON.parse(resEn) : null;
+
+    let text = `**📖 ${input}**\n`;
+    for (let v = startVerse; v <= endVerse; v++) {
+      const vKo = ko ? ko.verses.find(vv => vv.verse === v) : null;
+      const vEn = en ? en.verses.find(vv => vv.verse === v) : null;
+      if (vKo) text += `> **${v}절** ${vKo.text.trim()}\n`;
+      if (vEn && needKo) text += `> *${vEn.text.trim()}*\n`;
+      if (vEn && !needKo) text += `> **${v}** ${vEn.text.trim()}\n`;
+      if (v < endVerse) text += `>\n`;
+    }
+    Editor.insertTextAtCursor(text);
+  } catch (err) {
+    await CommandBar.showAlert("API 오류 / API Error", `${err}`);
+  }
 }
