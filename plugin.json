@@ -5,7 +5,7 @@
   "plugin.name": "Bible Verse Inserter",
   "plugin.description": "성경 구절을 한국어·영어로 노트에 삽입 | Insert Bible verses (Korean + English KJV) via GetBible API",
   "plugin.author": "Duncan",
-  "plugin.version": "1.0.0",
+  "plugin.version": "1.1.1",
   "plugin.script": "script.js",
   "plugin.commands": [
     {
